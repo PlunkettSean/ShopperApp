@@ -90,7 +90,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * This method gets called when the main activity is created. It will selecte
+     * This method gets called when the main activity is created. It will select
      * and return all of the data in the shoppingList table.
      * @return Cursor that contains all the data in the shoppingList table
      */

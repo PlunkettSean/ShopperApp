@@ -29,6 +29,9 @@ public class CreateList extends AppCompatActivity {
     // declare Calender
     Calendar calendar;
 
+    // Declare a DBHandler
+    DBHandler dbHandler;
+
     /**
      * This method initializes the Action Bar and View of the activity.
      * @param savedInstanceState
@@ -84,6 +87,9 @@ public class CreateList extends AppCompatActivity {
                         calendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
+
+        // initialize DBHandler
+        dbHandler = new DBHandler(this, null);
     }
 
     private void updateDueDate() {
@@ -149,6 +155,7 @@ public class CreateList extends AppCompatActivity {
                     Toast.LENGTH_LONG).show();
         } else {
             // add shopping list into database
+            dbHandler.addShoppingList(name, store, date);
 
             // display "Shopping List Created!"
             Toast.makeText(this, "Shopping List Created!",

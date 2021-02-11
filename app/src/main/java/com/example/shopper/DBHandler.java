@@ -2,6 +2,7 @@ package com.example.shopper;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -86,5 +87,21 @@ public class DBHandler extends SQLiteOpenHelper {
 
         // Close database reference
         db.close();
+    }
+
+    /**
+     * This method gets called when the main activity is created. It will selecte
+     * and return all of the data in the shoppingList table.
+     * @return Cursor that contains all the data in the shoppingList table
+     */
+    public Cursor getSHoppingList() {
+        // get reference to the shopper database
+        SQLiteDatabase db = getWritableDatabase();
+
+        // define select statement and store it in a string
+        String query = "SELECT * FROM " + TABLE_SHOPPPING_LIST;
+
+        // execute statement and return it as a Cursor
+        return db.rawQuery(query, null);
     }
 }

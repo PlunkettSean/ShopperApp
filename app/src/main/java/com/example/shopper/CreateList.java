@@ -1,20 +1,21 @@
 package com.example.shopper;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
-
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class CreateList extends AppCompatActivity {
     // declare intent
@@ -40,9 +41,57 @@ public class CreateList extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // initialize EditTexts
-        nameEditText = (EditText) findViewById(R.id.nameEditText);
-        storeEditText = (EditText) findViewById(R.id.storeEditText);
-        dateEditText = (EditText) findViewById(R.id.dateEditText);
+        nameEditText = findViewById(R.id.nameEditText);
+        storeEditText = findViewById(R.id.storeEditText);
+        dateEditText = findViewById(R.id.dateEditText);
+
+        // initialize calender
+        calendar = Calendar.getInstance();
+
+        // initialize DatePickerDialog and register an OnDateSetListener to it.
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+            /**
+             * This method handles the OnDateDet event
+             * @param datePicker DatePickerDialog view
+             * @param year selected year
+             * @param month selected month
+             * @param dayOfMonth selected day
+             */
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+                // set the year, month, and dayOfMonth selected in the dialog into the calender
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, month);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                // call method that takes date in calendar and place it in dateEditText
+                updateDueDate();
+            }
+        };
+        // register OnCLickListener to the dateEditText
+        dateEditText.setOnClickListener(new View.OnClickListener() {
+            /**
+             * this method is called every time the dateEditText is clicked
+             * @param view
+             */
+            @Override
+            public void onClick(View view) {
+                //display DatePickerDialog with current Date selected
+                new DatePickerDialog(CreateList.this,
+                        date,
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+    }
+
+    private void updateDueDate() {
+        // create a format for the date in the calendar
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+        // apply format to date in calender and set formatted date in dateEditText
+        dateEditText.setText(simpleDateFormat.format(calendar.getTime()));
     }
 
     /**
@@ -83,6 +132,27 @@ public class CreateList extends AppCompatActivity {
         }
     }
 
-    public void createList(MenuItem item) {
+    /**
+     * This method gets called when the add button in the Action Bar gets clicked
+     * @param menuItem add list menu item
+     */
+    public void createList(MenuItem menuItem) {
+        // get data input in EditTexts and store it in Strings
+        String name = nameEditText.getText().toString();
+        String store = storeEditText.getText().toString();
+        String date = dateEditText.getText().toString();
+
+        // trim Strings and check to see if they're equal to an empty string
+        if(name.trim().equals("") || store.trim().equals("") || date.trim().equals("")) {
+            //display "Please enter a name, store, and date!"
+            Toast.makeText(this, "Please enter a name, store, and date!",
+                    Toast.LENGTH_LONG).show();
+        } else {
+            // add shopping list into database
+
+            // display "Shopping List Created!"
+            Toast.makeText(this, "Shopping List Created!",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 }

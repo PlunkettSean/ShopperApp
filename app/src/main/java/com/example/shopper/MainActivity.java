@@ -1,5 +1,6 @@
 package com.example.shopper;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -10,6 +11,7 @@ import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * This method initializes the Action Bar and View of the activity.
-     * @param savedInstanceState
+     * @param savedInstanceState savedInstanceState
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,28 @@ public class MainActivity extends AppCompatActivity {
 
         // Set ShoppingLists CursorAdaptor on the ListView
         shopperListView.setAdapter(shoppingListCursorAdaptor);
+
+        // set OnItemClickListener on the ListView
+        shopperListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /**
+             * This method gets called when a item in the list view gets clicked
+             * @param parent shopperListView
+             * @param view MainActivity view
+             * @param position position of the clicked item
+             * @param id database id of the clicked item
+             */
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Initialize Intent for the ViewList Activity
+                intent = new Intent(MainActivity.this, ViewList.class);
+
+                // put the database id into the intent
+                intent.putExtra("_id", id);
+
+                // start the ViewList Activity
+                startActivity(intent);
+            }
+        });
     }
 
     /**
@@ -71,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
      * @param item selected item in the overflow menu.
      * @return true if the menu item is selected, else false.
      */
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // get the id of the menu item selected
@@ -93,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * This method gets called when the add Floating Action Button is selected.
      * It starts the CreateList Activity
-     * @param view
+     * @param view view
      */
     public void openCreateList(View view) {
         // initialize an Intent for the CreateList Activity and start it.

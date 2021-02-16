@@ -54,21 +54,21 @@ public class ShoppingLists extends CursorAdapter {
      */
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        /**
-         * Set the value of nameTextView of li_shopping_list layout to the name of the
-         * ShoppingList from the cursor
+        /*
+          Set the value of nameTextView of li_shopping_list layout to the name of the
+          ShoppingList from the cursor
          */
         ((TextView) view.findViewById(R.id.nameTextView)).
                 setText(cursor.getString(cursor.getColumnIndex("name")));
-        /**
-         * Set the value of storeTextView of li_shopping_list layout to the name of the
-         * ShoppingList from the cursor
+        /*
+          Set the value of storeTextView of li_shopping_list layout to the name of the
+          ShoppingList from the cursor
          */
         ((TextView) view.findViewById(R.id.storeTextView)).
                 setText(cursor.getString(cursor.getColumnIndex("store")));
-        /**
-         * Set the value of dateTextView of li_shopping_list layout to the name of the
-         * ShoppingList from the cursor
+        /*
+          Set the value of dateTextView of li_shopping_list layout to the name of the
+          ShoppingList from the cursor
          */
         ((TextView) view.findViewById(R.id.dateTextView)).
                 setText(cursor.getString(cursor.getColumnIndex("date")));

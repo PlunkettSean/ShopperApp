@@ -3,24 +3,22 @@ package com.example.shopper;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
+public class AddItem extends AppCompatActivity {
 
-public class ViewList extends AppCompatActivity {
-
-    // Declare a Bundle and a long used to get and store the data sent from the MainActivity
+    // Declare a Bundle and a long used to get and store the data sent from the ViewList
     Bundle bundle;
     long id;
 
     // Declare a DBHandler
     DBHandler dbHandler;
 
-    // declare intent
+    // Declare intent
     Intent intent;
 
     /**
@@ -30,7 +28,7 @@ public class ViewList extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_list);
+        setContentView(R.layout.activity_add_item);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -42,12 +40,6 @@ public class ViewList extends AppCompatActivity {
 
         // Initialize the DBHandler
         dbHandler =  new DBHandler(this, null);
-
-        // Call getShoppingListName and store it into a new String
-        String shoppingListName = dbHandler.getShoppingListName((int) id);
-
-        // Set the title of the ViewList Activity to shoppingListName
-        setTitle(shoppingListName);
     }
 
     /**
@@ -59,7 +51,7 @@ public class ViewList extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_view_list, menu);
+        getMenuInflater().inflate(R.menu.menu_add_item, menu);
         return true;
     }
 
@@ -84,9 +76,9 @@ public class ViewList extends AppCompatActivity {
                 intent = new Intent(this, CreateList.class);
                 startActivity(intent);
                 return true;
-            case R.id.action_add_item :
-                // initialize an Intent for the AddItem Activity and start it.
-                intent = new Intent(this, AddItem.class);
+            case R.id.action_view_list :
+                // initialize an Intent for the ViewList Activity and start it.
+                intent = new Intent(this, ViewList.class);
                 // put the database id into the intent
                 intent.putExtra("_id", id);
                 startActivity(intent);
@@ -98,13 +90,9 @@ public class ViewList extends AppCompatActivity {
     /**
      * This method gets called when the add Floating Action Button is selected.
      * It starts the AddItem Activity
-     * @param view view
+     * @param menuItem menuItem
      */
-    public void openAddItem(View view) {
-        // initialize an Intent for the CreateList Activity and start it.
-        intent = new Intent(this, AddItem.class);
-        // put the database id into the intent
-        intent.putExtra("_id", id);
-        startActivity(intent);
+    public void addItem(MenuItem menuItem) {
+
     }
 }

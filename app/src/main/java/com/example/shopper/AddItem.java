@@ -5,11 +5,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class AddItem extends AppCompatActivity {
+public class AddItem extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     // Declare a Bundle and a long used to get and store the data sent from the ViewList
     Bundle bundle;
@@ -20,6 +26,16 @@ public class AddItem extends AppCompatActivity {
 
     // Declare intent
     Intent intent;
+
+    // Derclare EditTexts
+    EditText nameEditText;
+    EditText priceEditText;
+
+    // declare spinner
+    Spinner quantitySpinner;
+
+    // declare a String to store the selected Spinner Value
+    String quantity;
 
     /**
      * This method initializes the Action Bar and View of the activity.
@@ -40,6 +56,27 @@ public class AddItem extends AppCompatActivity {
 
         // Initialize the DBHandler
         dbHandler =  new DBHandler(this, null);
+
+        // Initialize EditTexts
+        nameEditText = (EditText) findViewById(R.id.nameEditText);
+        priceEditText = (EditText) findViewById(R.id.priceEditText);
+
+        // Initialize Spinner
+        quantitySpinner = (Spinner) findViewById(R.id.quantitySpinner);
+
+        // Initialize ArrayAdapter with values in quantities String-Array
+        // and stylize it with style defined by simple_spinner_item
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.quantities, android.R.layout.simple_spinner_item);
+
+        // further stylize the Array Adapter
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
+        // Set the ArrayAdapter on Spinner
+        quantitySpinner.setAdapter(adapter);
+
+        // Register an OnItemSelectListener to the Spinner
+        quantitySpinner.setOnItemSelectedListener(this);
     }
 
     /**
@@ -88,11 +125,56 @@ public class AddItem extends AppCompatActivity {
     }
 
     /**
-     * This method gets called when the add Floating Action Button is selected.
-     * It starts the AddItem Activity
+     * This method gets called when the add Button in action bar is selected.
      * @param menuItem menuItem
      */
     public void addItem(MenuItem menuItem) {
+        // get data in EditTexts and store it in strings
+        String name = nameEditText.getText().toString();
+        String price = priceEditText.getText().toString();
+
+        // trim Strings ans see if they're equal to empy strings
+        if (name.trim().equals("") || price.trim().equals("") || quantity.trim().equals("")) {
+            // Display a Toast "Please Enter Name, Price and Quantity." when any var is empty
+            Toast.makeText(this, "Please Enter Name, Price and Quantity.",
+                    Toast.LENGTH_LONG).show();
+        } else {
+            // add item into the database
+            dbHandler.addItemToList(name, Double.parseDouble(price), Integer.parseInt(quantity), (int) id);
+            // display Toast saying "Item Added!" when all var are non-Nul or empty
+            Toast.makeText(this, "Item Added!",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * <p>Callback method to be invoked when an item in this view has been
+     * selected. This callback is invoked only when the newly selected
+     * position is different from the previously selected position or if
+     * there was no selected item.</p>
+     * <p>
+     * Implementers can call getItemAtPosition(position) if they need to access the
+     * data associated with the selected item.
+     *
+     * @param parent   The AdapterView where the selection happened
+     * @param view     The view within the AdapterView that was clicked
+     * @param position The position of the view in the adapter
+     * @param id       The row id of the item that is selected
+     */
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        quantity = parent.getItemAtPosition(position).toString();
+    }
+
+    /**
+     * Callback method to be invoked when the selection disappears from this
+     * view. The selection can disappear for instance when touch is activated
+     * or when the adapter becomes empty.
+     *
+     * @param parent The AdapterView that now contains no selected item.
+     */
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
     }
 }

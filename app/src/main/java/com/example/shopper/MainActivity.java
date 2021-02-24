@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         // initialize ShoppingLists CursorAdaptor
         shoppingListCursorAdaptor = new ShoppingLists(this,
-                dbHandler.getSHoppingList(),0);
+                dbHandler.getShoppingList(),0);
 
         // Set ShoppingLists CursorAdaptor on the ListView
         shopperListView.setAdapter(shoppingListCursorAdaptor);

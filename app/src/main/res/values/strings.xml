@@ -10,6 +10,7 @@
     <string name="action_add_item">Add Item</string>
     <string name="title_activity_add_item">Add Item</string>
     <string name="view_list">View List</string>
+    <string name="default_list_item_image">Default list item image</string>
     <string-array name="quantities">
         <item />
         <item>1</item>

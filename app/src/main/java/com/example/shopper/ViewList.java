@@ -10,7 +10,9 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class ViewList extends AppCompatActivity {
 
@@ -64,6 +66,43 @@ public class ViewList extends AppCompatActivity {
 
         // Set the ShoppingListItems CursorAdaptor (shoppingListItemsAdapter) on the itemListView
         itemListView.setAdapter(shoppingListItemsAdapter);
+
+        // register an OnItemClickListener on the ListView
+        itemListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            /**
+             * This method gets called when an item in the ListView is clicked
+             * @param parent itemListView
+             * @param view ViewList activity view
+             * @param position posistion of the clicked item
+             * @param id database id of the clicked item
+             */
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // call method that updates the clicked item item_has to true if it is false
+                updateItem(id);
+            }
+        });
+    }
+
+    /**
+     * This method gets called when an item is clicked in the ListView.
+     * It Updates the clicked item's item_has to true if it's false.
+     * @param id database id of the clicked item
+     */
+    private void updateItem(long id) {
+        // checking if the clicked item is unpurchaced
+        if (dbHandler.isItemUnpurchased((int) id) == 1) {
+            // make clicked item purchased
+            dbHandler.updateItem((int) id);
+
+            // refresh ListView updated data
+            shoppingListItemsAdapter.swapCursor(dbHandler.getShoppingListItems((int) this.id));
+            shoppingListItemsAdapter.notifyDataSetChanged();
+
+            //display Toast indicating item is purchased
+            Toast.makeText(this, "item Purchased!", Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
